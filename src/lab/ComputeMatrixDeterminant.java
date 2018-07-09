@@ -6,20 +6,21 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 
 public class ComputeMatrixDeterminant {
 
 	public static void main(String[] args) {
 		String inputFilePath = args[0];
-		String outputFilePath = args[1];
+		// String outputFilePath = args[1];
 
 		try {
 			FileReader fileReader = new FileReader(inputFilePath);
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 
 			// write the result to file
-			File outFile = new File(outputFilePath);
-			PrintWriter writer = new PrintWriter(outFile);
+			// File outFile = new File(outputFilePath);
+			// PrintWriter writer = new PrintWriter(outFile);
 
 			// start reading file line by line
 			String line;
@@ -57,7 +58,10 @@ public class ComputeMatrixDeterminant {
 
 						}
 					}
-					
+
+					// print the matrix
+					printMatirx(matrix);
+
 					// TODO do the compute
 					int determinant = computeDeterminant(matrix);
 					System.out.println("Determinant is " + determinant);
@@ -76,22 +80,20 @@ public class ComputeMatrixDeterminant {
 	}
 
 	private static int computeDeterminant(int[][] matrix) {
+		int det = 0;
 
 		// when matrix is 1X1
 		if (matrix.length == 1 && matrix[0].length == 1) {
-			return matrix[0][0];
+			det = matrix[0][0];
 		} else {
 
-			for (int i = 1; i < matrix.length; i++) {
-				for (int j = 1; j < matrix[i].length; j++) {
-
-					matrix = minor(i, j, matrix);
-					return (int) Math.pow(-1, i + j) * matrix[i][j] * computeDeterminant(matrix);
-				}
+			for (int i = 0; i < matrix.length; i++) {
+				int j = 0;
+				det += (int) Math.pow(-1, i + j) * matrix[i][j] * computeDeterminant(minor(i, j, matrix));
 			}
 		}
 
-		return 0;
+		return det;
 
 	}
 
@@ -100,10 +102,12 @@ public class ComputeMatrixDeterminant {
 		int[][] minorMatrix = new int[n][n];
 
 		for (int i = 0; i < matrix.length; i++) {
-			if (i != elementCol) {
-				for (int j = 0; j < matrix[i].length; j++) {
-					int minorRow = i;
-					int minorCol = j;
+
+			for (int j = 0; j < matrix[i].length; j++) {
+				int minorRow = i;
+				int minorCol = j;
+
+				if (i != elementRow && j != elementCol) {
 
 					if (i > elementRow) {
 						minorRow--;
@@ -114,8 +118,8 @@ public class ComputeMatrixDeterminant {
 					}
 
 					minorMatrix[minorRow][minorCol] = matrix[i][j];
-
 				}
+
 			}
 
 		}
@@ -138,7 +142,14 @@ public class ComputeMatrixDeterminant {
 
 		return matrix;
 	}
-	
 
+	private static void printMatirx(int[][] matrix) {
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[i].length; j++) {
+				System.out.print(matrix[i][j] + " ");
+			}
+			System.out.println();
+		}
+	}
 
 }
