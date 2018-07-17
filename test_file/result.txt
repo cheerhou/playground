@@ -1,0 +1,14 @@
+5
+Determinant is 5
+2 3 
+5 9 
+Determinant is 3
+3 -2 4 
+-1 5 2 
+-3 6 4 
+Determinant is 64
+2 4 5 6 
+0 0 0 0 
+0 0 0 0 
+0 0 0 0 
+Determinant is 0

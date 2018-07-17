@@ -6,21 +6,26 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Writer;
 import java.util.Arrays;
 
 public class ComputeMatrixDeterminant {
 
 	public static void main(String[] args) {
 		String inputFilePath = args[0];
-		// String outputFilePath = args[1];
+		 String outputFilePath = args[1];
 
+		 FileReader fileReader = null;
+		 BufferedReader bufferedReader = null;
+		 PrintWriter writer = null;
+		 
 		try {
-			FileReader fileReader = new FileReader(inputFilePath);
-			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			fileReader = new FileReader(inputFilePath);
+			bufferedReader = new BufferedReader(fileReader);
 
 			// write the result to file
-			// File outFile = new File(outputFilePath);
-			// PrintWriter writer = new PrintWriter(outFile);
+			File outFile = new File(outputFilePath);
+			writer = new PrintWriter(outFile);
 
 			// start reading file line by line
 			String line;
@@ -34,7 +39,11 @@ public class ComputeMatrixDeterminant {
 				n = lineArr.length;
 
 				if (n == 1) {
-
+					writer.println(lineArr[0]);
+					writer.println("Determinant is " + lineArr[0]);
+					
+					System.out.println(lineArr[0]);
+					System.out.println("Determinant is " + lineArr[0]);
 				} else if (n > 1) {
 					// create matrix
 					int[][] matrix = new int[n][n];
@@ -59,22 +68,32 @@ public class ComputeMatrixDeterminant {
 						}
 					}
 
-					// print the matrix
-					printMatirx(matrix);
+					//print the matrix
+					printMatirx(writer, matrix);
 
-					// TODO do the compute
-					int determinant = computeDeterminant(matrix);
+					//do the compute
+					int determinant = computeDeterminant(matrix);	
+
+					// write the result to file			
 					System.out.println("Determinant is " + determinant);
-
-					// TODO write to file
+					writer.println("Determinant is " + determinant);
 				}
-
+							
 			}
 
 		} catch (FileNotFoundException e) {
 			System.out.println(e);
 		} catch (IOException e) {
 			System.out.println(e);
+		} finally {
+			try {
+				bufferedReader.close();
+				fileReader.close();
+				writer.close();
+			} catch (IOException e) {
+				System.out.println(e);
+			}
+			
 		}
 
 	}
@@ -143,11 +162,14 @@ public class ComputeMatrixDeterminant {
 		return matrix;
 	}
 
-	private static void printMatirx(int[][] matrix) {
+	private static void printMatirx(PrintWriter writer, int[][] matrix) {
 		for (int i = 0; i < matrix.length; i++) {
 			for (int j = 0; j < matrix[i].length; j++) {
+				writer.print(matrix[i][j] + " ");
 				System.out.print(matrix[i][j] + " ");
 			}
+			
+			writer.println();
 			System.out.println();
 		}
 	}
