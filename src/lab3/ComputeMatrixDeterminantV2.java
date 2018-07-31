@@ -1,4 +1,4 @@
-package lab;
+package lab3;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -6,19 +6,17 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Writer;
-import java.util.Arrays;
 
-public class ComputeMatrixDeterminant {
+public class ComputeMatrixDeterminantV2 {
 
 	public static void main(String[] args) {
 		String inputFilePath = args[0];
-		 String outputFilePath = args[1];
+		String outputFilePath = args[1];
 
-		 FileReader fileReader = null;
-		 BufferedReader bufferedReader = null;
-		 PrintWriter writer = null;
-		 
+		FileReader fileReader = null;
+		BufferedReader bufferedReader = null;
+		PrintWriter writer = null;
+
 		try {
 			fileReader = new FileReader(inputFilePath);
 			bufferedReader = new BufferedReader(fileReader);
@@ -29,37 +27,36 @@ public class ComputeMatrixDeterminant {
 
 			// start reading file line by line
 			String line;
-			int lineIndex = -1;
 			String[] lineArr;
 			int n = 0;
 
 			while ((line = bufferedReader.readLine()) != null) {
-				lineIndex++;
 				lineArr = line.split(" ");
 				n = lineArr.length;
 
 				if (n == 1) {
 					writer.println(lineArr[0]);
 					writer.println("Determinant is " + lineArr[0]);
-					
+
 					System.out.println(lineArr[0]);
 					System.out.println("Determinant is " + lineArr[0]);
 				} else if (n > 1) {
 					// create matrix
-					int[][] matrix = new int[n][n];
+					System.out.println("Creating " + n + "X" + n + " matrix...");
+					
+					int[][] matrixArr = new int[n][n];
 					// add current line to matrix
-					matrix = addMartrixRow(0, matrix, lineArr);
+					matrixArr = addMartrixRow(0, matrixArr, lineArr);
 
 					// read next n-1 line
 					for (int i = 1; i < n; i++) {
 						if ((line = bufferedReader.readLine()) != null) {
-							lineIndex++;
 
 							lineArr = line.split(" ");
 							int nTemp = lineArr.length;
 
 							if (nTemp == n) {
-								matrix = addMartrixRow(i, matrix, lineArr);
+								matrixArr = addMartrixRow(i, matrixArr, lineArr);
 							} else {
 								System.out.println(line + " is invalid.");
 								System.exit(0);
@@ -67,18 +64,22 @@ public class ComputeMatrixDeterminant {
 
 						}
 					}
+										
 
-					//print the matrix
-					printMatirx(writer, matrix);
+					// print the matrix				
+//					printMatirx(writer, matrixArr);
+					
+					//Array -> Node
 
-					//do the compute
-					int determinant = computeDeterminant(matrix);	
 
-					// write the result to file			
-					System.out.println("Determinant is " + determinant);
-					writer.println("Determinant is " + determinant);
+					// do the compute
+//					int determinant = computeDeterminant(matrixArr);
+
+					// write the result to file
+//					System.out.println("Determinant is " + determinant);
+//					writer.println("Determinant is " + determinant);
 				}
-							
+
 			}
 
 		} catch (FileNotFoundException e) {
@@ -93,7 +94,7 @@ public class ComputeMatrixDeterminant {
 			} catch (IOException e) {
 				System.out.println(e);
 			}
-			
+
 		}
 
 	}
@@ -168,7 +169,7 @@ public class ComputeMatrixDeterminant {
 				writer.print(matrix[i][j] + " ");
 				System.out.print(matrix[i][j] + " ");
 			}
-			
+
 			writer.println();
 			System.out.println();
 		}
