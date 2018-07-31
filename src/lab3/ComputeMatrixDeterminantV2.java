@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
 
 public class ComputeMatrixDeterminantV2 {
 
@@ -42,13 +43,11 @@ public class ComputeMatrixDeterminantV2 {
 					System.out.println("Determinant is " + lineArr[0]);
 				} else if (n > 1) {
 					// create matrix
-					System.out.println("Creating " + n + "X" + n + " matrix...");
-					
-					int[][] matrixArr = new int[n][n];
-					// add current line to matrix
-					matrixArr = addMartrixRow(0, matrixArr, lineArr);
+					System.out.println("Creating " + n + "X" + n + " matrix...");							
+					LinkedListMatrix matrix = new LinkedListMatrix();						
+					matrix.addMatrixRow(lineArr);
 
-					// read next n-1 line
+					// read next n-1 line to build the matrix
 					for (int i = 1; i < n; i++) {
 						if ((line = bufferedReader.readLine()) != null) {
 
@@ -56,7 +55,7 @@ public class ComputeMatrixDeterminantV2 {
 							int nTemp = lineArr.length;
 
 							if (nTemp == n) {
-								matrixArr = addMartrixRow(i, matrixArr, lineArr);
+								matrix.addMatrixRow(lineArr);
 							} else {
 								System.out.println(line + " is invalid.");
 								System.exit(0);
@@ -65,19 +64,15 @@ public class ComputeMatrixDeterminantV2 {
 						}
 					}
 										
-
 					// print the matrix				
-//					printMatirx(writer, matrixArr);
+					String data = matrix.showData();
+					System.out.print(data);					
+					writer.print(data);
 					
-					//Array -> Node
-
-
 					// do the compute
-//					int determinant = computeDeterminant(matrixArr);
-
-					// write the result to file
-//					System.out.println("Determinant is " + determinant);
-//					writer.println("Determinant is " + determinant);
+					int determinant = computeDeterminant(matrix);
+					System.out.println("Determinant is " + determinant);
+					writer.println("Determinant is " + determinant);
 				}
 
 			}
@@ -99,80 +94,27 @@ public class ComputeMatrixDeterminantV2 {
 
 	}
 
-	private static int computeDeterminant(int[][] matrix) {
+	private static int computeDeterminant(LinkedListMatrix matrix) {
 		int det = 0;
 
 		// when matrix is 1X1
-		if (matrix.length == 1 && matrix[0].length == 1) {
-			det = matrix[0][0];
+		if (matrix.getMatrixSize() == 1) {
+			return det = matrix.head.getFirst();
 		} else {
-
-			for (int i = 0; i < matrix.length; i++) {
-				int j = 0;
-				det += (int) Math.pow(-1, i + j) * matrix[i][j] * computeDeterminant(minor(i, j, matrix));
+			//loop through head
+			Iterator<Integer> it = matrix.head.iterator();
+			int i = 0;
+			
+			while(it.hasNext()) {
+				int headValue = it.next();	
+				LinkedListMatrix minMatrix = matrix.getMinor(headValue);
+				
+				det += (int) Math.pow(-1, i) * headValue * computeDeterminant(minMatrix);
+				i++;
 			}
 		}
 
 		return det;
-
-	}
-
-	private static int[][] minor(int elementRow, int elementCol, int[][] matrix) {
-		int n = matrix.length - 1;
-		int[][] minorMatrix = new int[n][n];
-
-		for (int i = 0; i < matrix.length; i++) {
-
-			for (int j = 0; j < matrix[i].length; j++) {
-				int minorRow = i;
-				int minorCol = j;
-
-				if (i != elementRow && j != elementCol) {
-
-					if (i > elementRow) {
-						minorRow--;
-					}
-
-					if (j > elementCol) {
-						minorCol--;
-					}
-
-					minorMatrix[minorRow][minorCol] = matrix[i][j];
-				}
-
-			}
-
-		}
-
-		return minorMatrix;
-	}
-
-	/**
-	 * adding the given array to the specific row of the matrix
-	 * 
-	 * @param rowNum
-	 * @param matrix
-	 * @param row
-	 * @return
-	 */
-	private static int[][] addMartrixRow(int rowNum, int[][] matrix, String[] row) {
-		for (int i = 0; i < row.length; i++) {
-			matrix[rowNum][i] = Integer.parseInt(row[i]);
-		}
-
-		return matrix;
-	}
-
-	private static void printMatirx(PrintWriter writer, int[][] matrix) {
-		for (int i = 0; i < matrix.length; i++) {
-			for (int j = 0; j < matrix[i].length; j++) {
-				writer.print(matrix[i][j] + " ");
-				System.out.print(matrix[i][j] + " ");
-			}
-
-			writer.println();
-			System.out.println();
-		}
 	}
 
 }
