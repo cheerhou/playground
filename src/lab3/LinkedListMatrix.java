@@ -36,16 +36,14 @@ public class LinkedListMatrix {
 		return head.size();
 	}
 	
-	public LinkedListMatrix getMinor(int value) {
+	public LinkedListMatrix getMinor(int rowNum) {
 		LinkedListMatrix minorMatrix = new LinkedListMatrix();
-		boolean found = false;
-		for(int i = 0; i < matrix.size(); i++) {	
-			LinkedList<Integer> tempRow = new LinkedList<>(matrix.get(i));
-			if(!found && tempRow.getFirst() == value) {//first time found, skip the row
-				found = true;
-			}else if((found && tempRow.getFirst() == value) || (tempRow.getFirst() != value)) { //second time found, do sth
+		
+		for(int i = 0; i < matrix.size(); i++) {		
+			if(i != rowNum) {//skip the row where head sit
+				LinkedList<Integer> tempRow = new LinkedList<>(matrix.get(i));
 				tempRow.removeFirst();
-				minorMatrix.addMatrixRow(tempRow);	
+				minorMatrix.addMatrixRow(tempRow);
 			}
 				
 		}

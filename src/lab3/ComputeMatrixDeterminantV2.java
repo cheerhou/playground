@@ -107,7 +107,10 @@ public class ComputeMatrixDeterminantV2 {
 			
 			while(it.hasNext()) {
 				int headValue = it.next();	
-				LinkedListMatrix minMatrix = matrix.getMinor(headValue);
+				LinkedListMatrix minMatrix = matrix.getMinor(i);
+				
+				System.out.println("minor of " + headValue);
+				System.out.println(minMatrix.showData());
 				
 				det += (int) Math.pow(-1, i) * headValue * computeDeterminant(minMatrix);
 				i++;
